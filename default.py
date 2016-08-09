@@ -62,7 +62,15 @@ if mode is None:
     response_json = json.loads(urllib2.urlopen(req).read())
     
     for channel in response_json['live']:
-        addLink(channel['title'], channel['channel']['stream'], 'channel')
+        title = channel['title']
+        
+        if (channel['is_live'] == 1) or (channel['has_dutch_participants'] == 1):
+            if (channel['is_live'] == 1):
+                title = title + ' (live)'
+            if (channel['has_dutch_participants'] == 1):
+                title = title + ' (NL)'
+                
+        addLink(title, channel['channel']['stream'], 'channel')
 
     xbmcplugin.endOfDirectory(addon_handle)
 
